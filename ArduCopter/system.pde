@@ -407,7 +407,7 @@ static bool set_mode(uint8_t mode)
 
         case AUTO:
             // check we have a GPS and at least one mission command (note the home position is always command 0)
-            if (GPS_ok() && g.command_total > 1) {
+            if (g.command_total > 1) {
                 success = true;
                 ap.manual_throttle = false;
                 ap.manual_attitude = false;
