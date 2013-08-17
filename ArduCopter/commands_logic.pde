@@ -516,9 +516,9 @@ static bool verify_land()
 static bool verify_nav_wp()
 {
     // check if we have reached the waypoint
-    if( !wp_nav.reached_destination() ) {
-        return false;
-    }
+//     if( !wp_nav.reached_destination() ) {
+//         return false;
+//     }
 
     // start timer if necessary
     if(loiter_time == 0) {
