@@ -13,6 +13,7 @@ static void process_nav_command()
         break;
 
     case MAV_CMD_NAV_WAYPOINT:                  // 16  Navigate to Waypoint
+        gcs_send_text_P(SEVERITY_LOW, PSTR("Navigating to waypoint"));
         do_nav_wp();
         break;
 
@@ -60,6 +61,7 @@ static void process_cond_command()
         break;
 
     case MAV_CMD_CONDITION_YAW:             // 115
+        gcs_send_text_P(SEVERITY_LOW, PSTR("Doing yaw"));
         do_yaw();
         break;
 
@@ -716,10 +718,10 @@ static bool verify_RTL()
 
 static void do_wait_delay()
 {
-    //cliSerial->print("dwd ");
+    cliSerial->print("dwd ");
     condition_start = millis();
     condition_value = command_cond_queue.lat * 1000;     // convert to milliseconds
-    //cliSerial->println(condition_value,DEC);
+    cliSerial->println(condition_value,DEC);
 }
 
 static void do_change_alt()
@@ -755,7 +757,7 @@ static void do_yaw()
         // relative angle
         yaw_look_at_heading = wrap_360_cd(nav_yaw + command_cond_queue.alt * 100);
     }
-
+http://qgroundcontrol.org/users/start#communication_debug_console
     // get turn speed
     if( command_cond_queue.lat == 0 ) {
         // default to regular auto slew rate
@@ -779,13 +781,13 @@ static void do_yaw()
 
 static bool verify_wait_delay()
 {
-    //cliSerial->print("vwd");
+    cliSerial->print("vwd");
     if (millis() - condition_start > (uint32_t)max(condition_value,0)) {
-        //cliSerial->println("y");
+        cliSerial->println("y");
         condition_value = 0;
         return true;
     }
-    //cliSerial->println("n");
+    cliSerial->println("n");
     return false;
 }
 
@@ -797,7 +799,7 @@ static bool verify_change_alt()
 
 static bool verify_within_distance()
 {
-    //cliSerial->printf("cond dist :%d\n", (int)condition_value);
+    cliSerial->printf("cond dist :%d\n", (int)condition_value);
     if (wp_distance < max(condition_value,0)) {
         condition_value = 0;
         return true;
@@ -808,7 +810,9 @@ static bool verify_within_distance()
 // verify_yaw - return true if we have reached the desired heading
 static bool verify_yaw()
 {
+    gcs_send_text_P(SEVERITY_LOW, PSTR("checking yaw"));
     if( labs(wrap_180_cd(ahrs.yaw_sensor-yaw_look_at_heading)) <= 200 ) {
+        gcs_send_text_P(SEVERITY_LOW, PSTR("Yaw verified"));
         return true;
     }else{
         return false;
@@ -864,27 +868,27 @@ static void do_jump()
     // when in use, it contains the current remaining jumps
     static int8_t jump = -10;                                                                   // used to track loops in jump command
 
-    //cliSerial->printf("do Jump: %d\n", jump);
+    cliSerial->printf("do Jump: %d\n", jump);
 
     if(jump == -10) {
-        //cliSerial->printf("Fresh Jump\n");
+        cliSerial->printf("Fresh Jump\n");
         // we use a locally stored index for jump
         jump = command_cond_queue.lat;
     }
-    //cliSerial->printf("Jumps left: %d\n",jump);
+    cliSerial->printf("Jumps left: %d\n",jump);
 
     if(jump > 0) {
-        //cliSerial->printf("Do Jump to %d\n",command_cond_queue.p1);
+        cliSerial->printf("Do Jump to %d\n",command_cond_queue.p1);
         jump--;
         change_command(command_cond_queue.p1);
 
     } else if (jump == 0) {
-        //cliSerial->printf("Did last jump\n");
+        cliSerial->printf("Did last jump\n");
         // we're done, move along
         jump = -11;
 
     } else if (jump == -1) {
-        //cliSerial->printf("jumpForever\n");
+        cliSerial->printf("jumpForever\n");
         // repeat forever
         change_command(command_cond_queue.p1);
     }
