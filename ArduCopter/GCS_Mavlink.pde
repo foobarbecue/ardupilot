@@ -1404,6 +1404,7 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
 
         case MAV_CMD_NAV_WAYPOINT:
             param1 = tell_command.p1;
+            param4 = tell_command.yaw;
             break;
 
         case MAV_CMD_DO_SET_PARAMETER:
@@ -1705,6 +1706,7 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
 
         case MAV_CMD_NAV_WAYPOINT:
             tell_command.p1 = packet.param1;
+            tell_command.yaw = packet.param4;
             break;
 
         case MAV_CMD_DO_SET_PARAMETER:

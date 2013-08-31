@@ -85,6 +85,7 @@
 
 //@{
 
+// Note: comments here do not jive with Mavlink parameter numbers (foobarbecue 30 Aug 2013)
 struct Location {
     uint8_t id;                                                 ///< command id
     uint8_t options;                                    ///< options bitmask (1<<0 = relative altitude)
@@ -92,6 +93,7 @@ struct Location {
     int32_t alt;                                        ///< param 2 - Altitude in centimeters (meters * 100)
     int32_t lat;                                        ///< param 3 - Lattitude * 10**7
     int32_t lng;                                        ///< param 4 - Longitude * 10**7
+    int16_t yaw;
 };
 
 //@}

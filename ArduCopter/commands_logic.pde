@@ -281,6 +281,13 @@ static void do_nav_wp()
         wp_nav.set_fast_waypoint(true);
     }
 
+    // check if we are in the mode to pay attention to mavlink waypoint yaw (parameter 4) and if so, do so
+    if (g.wp_yaw_behavior == WP_YAW_BEHAVIOR_OBEY_MAVLINK){
+    	// might also need more stuff from do_yaw();
+    	yaw_look_at_heading_slew = AUTO_YAW_SLEW_RATE;
+    	yaw_look_at_heading = command_nav_queue.yaw * 100;
+    }
+
     // set yaw_mode depending upon contents of WP_YAW_BEHAVIOR parameter
     set_yaw_mode(get_wp_yaw_mode(false));
 }

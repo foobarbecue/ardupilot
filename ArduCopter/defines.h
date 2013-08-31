@@ -203,6 +203,7 @@
 #define WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP               1   // auto pilot will face next waypoint or home during rtl
 #define WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP_EXCEPT_RTL    2   // auto pilot will face next waypoint except when doing RTL at which time it will stay in it's last 
 #define WP_YAW_BEHAVIOR_LOOK_AHEAD                    3   // auto pilot will look ahead during missions and rtl (primarily meant for traditional helicotpers)
+#define WP_YAW_BEHAVIOR_OBEY_MAVLINK                  4   // auto pilot will obey parameter 4 of MAV_CMD
 
 // TOY mixing options
 #define TOY_LOOKUP_TABLE 0
@@ -395,7 +396,7 @@ enum ap_message {
 // parameters get the first 1536 bytes of EEPROM, remainder is for waypoints
 #define WP_START_BYTE 0x600 // where in memory home WP is stored + all other
                             // WP
-#define WP_SIZE 15
+#define WP_SIZE 17
 
 // fence points are stored at the end of the EEPROM
 #define MAX_FENCEPOINTS 6

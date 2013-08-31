@@ -47,6 +47,9 @@ static struct Location get_cmd_with_index(int i)
 
         mem += 4;
         temp.lng = hal.storage->read_dword(mem);         // lon is stored in decimal * 10,000,000
+
+        mem += 4;
+        temp.yaw = hal.storage->read_dword(mem);		// yaw is from -180 to 180 in an int16_t
     }
 
     // Add on home altitude if we are a nav command (or other command with altitude) and stored alt is relative
@@ -94,8 +97,14 @@ static void set_cmd_with_index(struct Location temp, int i)
     mem += 4;
     hal.storage->write_dword(mem, temp.lat);     // Lat is stored in decimal degrees * 10^7
 
+    cliSerial->printf("writing to address to address lat %x",mem,temp.lat);
     mem += 4;
     hal.storage->write_dword(mem, temp.lng);     // Long is stored in decimal degrees * 10^7
+
+    cliSerial->printf(("writing to address %x yaw %x"),mem,temp.yaw);
+    mem += 4;
+    hal.storage->write_dword(mem, temp.yaw);
+
 
     // Make sure our WP_total
     if(g.command_total < (i+1))
